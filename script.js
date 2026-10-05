@@ -48,6 +48,22 @@ window.addEventListener("load", () => {
     tarefas.forEach((tarefa) => {
         const itemTarefa = document.createElement("li");
         itemTarefa.textContent = tarefa;
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox"; 
+        itemTarefa.appendChild(checkbox);
+        checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+                itemTarefa.style.textDecoration = "line-through";
+            } else {
+                itemTarefa.style.textDecoration = "none";
+            }
+        });
+        const botaoExcluir = document.createElement("button");
+        botaoExcluir.textContent = "Excluir";
+        botaoExcluir.addEventListener("click", () => {
+            botaoExcluir.parentElement.remove();
+        });
+        itemTarefa.appendChild(botaoExcluir);
         listaTarefas.appendChild(itemTarefa);
 
     });
