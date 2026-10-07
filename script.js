@@ -16,19 +16,12 @@ botaoAdicionar.addEventListener("click", () => {
     if (tarefa === "") {
         console.log("O input está vazio. Por favor, digite uma tarefa.");
         return;
-}
+    }
+
     tarefas.push(novaTarefa);
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
-    console.log("Botão clicado!");
-    const itemTarefa = document.createElement("li");
-    itemTarefa.textContent = tarefa;
-    const botaoExcluir = document.createElement("button");
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    itemTarefa.appendChild(checkbox);
-    itemTarefa.appendChild(botaoExcluir);
-    listaTarefas.appendChild(itemTarefa);
+    criarElementoTarefa(novaTarefa);
+    
     inputTarefa.value = "";
 
    checkbox.addEventListener("change", () => {
@@ -48,32 +41,36 @@ botaoAdicionar.addEventListener("click", () => {
     });
 });
 
-window.addEventListener("load", () => {
-    const tarefasSalvas = localStorage.getItem("tarefas");
-    if (tarefasSalvas) {
-        tarefas = JSON.parse(tarefasSalvas);
-    }
-    
-    tarefas.forEach((tarefa) => {
-        const itemTarefa = document.createElement("li");
-        itemTarefa.textContent = tarefa.descricao;
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox"; 
-        checkbox.checked = tarefa.concluida;
-        itemTarefa.appendChild(checkbox);
-        
-        checkbox.addEventListener("change", () => {
+function criarElementoTarefa(tarefa) {
+    const itemTarefa = document.createElement("li");
+    itemTarefa.textContent = tarefa.descricao;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox"; 
+    checkbox.checked = tarefa.concluida;
+    itemTarefa.appendChild(checkbox);
+
+    if (tarefa.concluida) {
+            itemTarefa.style.textDecoration = "line-through";
+        }
+
+    checkbox.addEventListener("change", () => {
             if (checkbox.checked) {
                 itemTarefa.style.textDecoration = "line-through";
-            } else {
-                itemTarefa.style.textDecoration = "none";
+                tarefa.concluida = true;
+                } else {
+                    itemTarefa.style.textDecoration = "none";
+                    tarefa.concluida = false;
             }
-        });
 
-        const botaoExcluir = document.createElement("button");
-        botaoExcluir.textContent = "Excluir";
-        
-        botaoExcluir.addEventListener("click", () => {
+    localStorage.setItem("tarefas", JSON.stringify(tarefas));
+});
+
+    const botaoExcluir = document.createElement("button");
+    botaoExcluir.textContent = "Excluir";
+    itemTarefa.appendChild(botaoExcluir);
+
+    botaoExcluir.addEventListener("click", () => {
             const indice = tarefas.findIndex((item) => {
                 return item === tarefa;
             });
@@ -85,9 +82,19 @@ window.addEventListener("load", () => {
             
             botaoExcluir.parentElement.remove();
         });
-       
-        itemTarefa.appendChild(botaoExcluir);
-        listaTarefas.appendChild(itemTarefa);
+
+    listaTarefas.appendChild(itemTarefa);
+}
+
+window.addEventListener("load", () => {
+    const tarefasSalvas = localStorage.getItem("tarefas");
+    if (tarefasSalvas) {
+        tarefas = JSON.parse(tarefasSalvas);
+    }
+    
+    tarefas.forEach((tarefa) => {
+        criarElementoTarefa(tarefa);
 
     });
+
 });
