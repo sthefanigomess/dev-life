@@ -2,20 +2,36 @@
 <html>
   <head>
     <title>Dev Life</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <h1>Dev Life</h1>
-    <p>Meu primeiro projeto full-stack.</p>
-    <input id="input-tarefa" type="text" placeholder="O que você precisa fazer hoje?" />
-    <button id="botao-adicionar">Adicionar tarefa</button>
+    <div class="dashboard">
 
-    <h2>Lista de tarefas</h2>
-    <ul id="lista-tarefas">
-        <li></li>
-    </ul> 
-    
-    
+        <header class="dashboard-header">
+            <h1>Dev Life</h1>
+            <p>Meu primeiro projeto full-stack.</p>
+        </header>
+
+        <div class="dashboard-content">
+
+            <section class="tasks-panel">
+                <h2>Minhas tarefas</h2>
+
+                <input
+                id="input-tarefa"
+                type="text"
+                placeholder="O que você precisa fazer hoje?"
+                />
+                <button id="botao-adicionar">Adicionar tarefa</button>
+
+                <ul id="lista-tarefas"></ul>
+            </section>
+            
+        </div>
+
+    </div>
+        
     <script src="script.js"></script>
   </body>
 </html>

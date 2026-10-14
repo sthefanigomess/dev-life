@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 32px;
+    font-family: Arial, sans-serif;
+    background: #171717;
+    color: #171717;
+}
+
+.dashboard {
+    max-width: 1400px;
+    min-height: calc(100vh - 64px);
+    margin: 0 auto;
+    padding: 32px;
+    background: #f5f5f2;
+    border-radius: 24px;
+}
+
+.dashboard-header {
+    background: #2929f5;
+    color: #ffffff;
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 28px;
+}
+
+.dashboard-header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+}
+
+.dashboard-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.tasks-panel {
+    background: #dff36a;
+    padding: 24px;
+    border-radius: 18px;
+}
+
+.tasks-panel h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.tasks-panel input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.tasks-panel input:focus {
+    outline: none;
+    border-color: #2939f5;
+}
+
+.tasks-panel button {
+    padding: 12px 20px;
+    background: #2939f5;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tasks-panel button:hover {
+    background: #1b28c7;
+}
+
+#lista-tarefas {
+    list-style: none;
+    padding: 0;
+    margin-top: 24px;
+}
+
+#lista-tarefas li{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    min-height: 60px;
+    background: #f5f5f2;
+    border-radius: 10px;
+}
+
+#lista-tarefas li input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    accent-color: #2939f5;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#lista-tarefas li button {
+    margin-left: auto;
+    padding: 8px 12px;
+    background: #f05b48;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#lista-tarefas li button:hover {
+    background: #d94332;
+}
+
+#lista-tarefas li span {
+    flex: 1;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+}

@@ -24,66 +24,50 @@ botaoAdicionar.addEventListener("click", () => {
     
     inputTarefa.value = "";
 
-   checkbox.addEventListener("change", () => {
-    if (checkbox.checked) {
-        itemTarefa.style.textDecoration = "line-through";
-        tarefa.concluida = true;
-        } else {
-            itemTarefa.style.textDecoration = "none";
-            tarefa.concluida = false;
-        }
-        localStorage.setItem("tarefas", JSON.stringify(tarefas));
-    });
-
-    botaoExcluir.addEventListener("click", () => {
-        botaoExcluir.parentElement.remove();
-
-    });
+   
 });
 
 function criarElementoTarefa(tarefa) {
     const itemTarefa = document.createElement("li");
-    itemTarefa.textContent = tarefa.descricao;
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox"; 
     checkbox.checked = tarefa.concluida;
-    itemTarefa.appendChild(checkbox);
+    
+    const textoTarefa = document.createElement("span");
+    textoTarefa.textContent = tarefa.descricao;
+    textoTarefa.style.textDecoration = tarefa.concluida 
+    ? "line-through" 
+    : "none";
 
-    if (tarefa.concluida) {
-            itemTarefa.style.textDecoration = "line-through";
-        }
+    itemTarefa.appendChild(checkbox);
+    itemTarefa.appendChild(textoTarefa);
 
     checkbox.addEventListener("change", () => {
-            if (checkbox.checked) {
-                itemTarefa.style.textDecoration = "line-through";
-                tarefa.concluida = true;
-                } else {
-                    itemTarefa.style.textDecoration = "none";
-                    tarefa.concluida = false;
-            }
+        tarefa.concluida = checkbox.checked;
 
-    localStorage.setItem("tarefas", JSON.stringify(tarefas));
-});
+        localStorage.setItem("tarefas", JSON.stringify(tarefas));
+
+        textoTarefa.style.textDecoration = tarefa.concluida 
+        ? "line-through" 
+        : "none";
+
+    });
 
     const botaoExcluir = document.createElement("button");
     botaoExcluir.textContent = "Excluir";
-    itemTarefa.appendChild(botaoExcluir);
 
     botaoExcluir.addEventListener("click", () => {
-            const indice = tarefas.findIndex((item) => {
-                return item === tarefa;
-            });
-            
+            const indice = tarefas.findIndex((item) => item === tarefa);
             if (indice !== -1) {
                 tarefas.splice(indice, 1);
                 localStorage.setItem("tarefas", JSON.stringify(tarefas));
+                itemTarefa.remove();
             }
-            
-            botaoExcluir.parentElement.remove();
         });
 
-    listaTarefas.appendChild(itemTarefa);
+        itemTarefa.appendChild(botaoExcluir);
+        listaTarefas.appendChild(itemTarefa);
 }
 
 window.addEventListener("load", () => {
