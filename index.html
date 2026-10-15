@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dev Life</title>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -18,12 +20,35 @@
             <section class="tasks-panel">
                 <h2>Minhas tarefas</h2>
 
+                <div class="resumo-tarefas">
+                    <p class="card-total">
+                        Total:
+                        <span id="total-tarefas">0</span>
+                    </p>
+
+                    <p class="card-concluidas">
+                        Concluídas: 
+                        <span id="tarefas-concluidas">0</span>
+                    </p>
+                    
+                    <p class="card-pendentes">
+                        Pendentes: 
+                        <span id="tarefas-pendentes">0</span>
+                    </p>
+                </div>
+
                 <input
                 id="input-tarefa"
                 type="text"
                 placeholder="O que você precisa fazer hoje?"
                 />
                 <button id="botao-adicionar">Adicionar tarefa</button>
+
+                <div class="filtros-tarefas">
+                    <button id="filtro-todas">Todas</button>
+                    <button id="filtro-pendentes">Pendentes</button>
+                    <button id="filtro-concluidas">Concluídas</button>
+                </div>
 
                 <ul id="lista-tarefas"></ul>
             </section>

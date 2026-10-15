@@ -71,10 +71,13 @@ body {
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.2s ease;
+    box-shadow: 0 3px 6px rgba(41, 57, 245, 0.15);
 }
 
 .tasks-panel button:hover {
     background: #1b28c7;
+    transform: translateY(-2px);
 }
 
 #lista-tarefas {
@@ -92,6 +95,12 @@ body {
     min-height: 60px;
     background: #f5f5f2;
     border-radius: 10px;
+    transition: 0.2s ease; 
+}
+
+#lista-tarefas li:hover {
+    box-shadow: 0 4px 12px rgba(41, 57, 245, 0.15);
+    transform: translateY(-2px);
 }
 
 #lista-tarefas li input[type="checkbox"] {
@@ -123,4 +132,90 @@ body {
     flex: 1;
     overflow-wrap: anywhere;
     line-height: 1.4;
+}
+
+.resumo-tarefas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.resumo-tarefas p {
+    margin: 0; 
+    padding: 20px;
+    background: #f5f5f2;
+    border-radius: 14px;
+    border: 1px solid #e2e2dc;
+    font-size: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resumo-tarefas p:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(23, 23, 23, 0.08);
+}
+
+.resumo-tarefas span {
+    display: block;
+    margin-top: 10px;
+    font-size: 30px;
+    color: #2939f5;
+}
+
+.card-total {
+    border-top: 4px solid #2939f5 !important;
+
+}
+
+.card-concluidas {
+    border-top: 4px solid #a6c936 !important;
+
+}
+
+.card-pendentes {
+    border-top: 4px solid #f05b48 !important;
+}
+
+@media (max-width: 768px) {
+    .dashboard{
+        padding: 16px;
+    }
+    
+    .resumo-tarefas {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header {
+        padding: 20px;
+    } 
+}
+
+.filtros-tarefas {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filtros-tarefas button {
+    padding: 10px 18px;
+    border: 2px solid #2929f5;
+    border-radius: 8px;
+    background: transparent;
+    color: #2929f5;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.filtros-tarefas button.ativo {
+    background: #2929f5;
+    color: #ffffff;
+}
+
+.filtros-tarefas button:hover {
+    background: #2929f5;
+    color: #ffffff;
 }

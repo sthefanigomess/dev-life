@@ -5,6 +5,21 @@ const inputTarefa = document.querySelector("#input-tarefa");
 const botaoAdicionar = document.querySelector("#botao-adicionar");
 const listaTarefas = document.querySelector("#lista-tarefas");
 let tarefas = [];
+let filtroAtual = "todas";
+
+const botaoFiltroTodas = document.querySelector("#filtro-todas");
+const botaoFiltroPendentes = document.querySelector("#filtro-pendentes");
+const botaoFiltroConcluidas = document.querySelector("#filtro-concluidas");
+
+function atualizarResumo() {
+    const total = tarefas.length;
+    const concluido = tarefas.filter(tarefa => tarefa.concluida).length;
+    const pendente = total - concluido;
+
+    document.querySelector("#total-tarefas").textContent = total;
+    document.querySelector("#tarefas-concluidas").textContent = concluido;
+    document.querySelector("#tarefas-pendentes").textContent = pendente;
+}
 
 botaoAdicionar.addEventListener("click", () => {
     const tarefa = inputTarefa.value;
@@ -20,10 +35,10 @@ botaoAdicionar.addEventListener("click", () => {
 
     tarefas.push(novaTarefa);
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
-    criarElementoTarefa(novaTarefa);
+    renderizarTarefas();
+    atualizarResumo();
     
     inputTarefa.value = "";
-
    
 });
 
@@ -48,9 +63,8 @@ function criarElementoTarefa(tarefa) {
 
         localStorage.setItem("tarefas", JSON.stringify(tarefas));
 
-        textoTarefa.style.textDecoration = tarefa.concluida 
-        ? "line-through" 
-        : "none";
+        renderizarTarefas();
+        atualizarResumo();
 
     });
 
@@ -63,6 +77,7 @@ function criarElementoTarefa(tarefa) {
                 tarefas.splice(indice, 1);
                 localStorage.setItem("tarefas", JSON.stringify(tarefas));
                 itemTarefa.remove();
+                atualizarResumo();
             }
         });
 
@@ -70,15 +85,59 @@ function criarElementoTarefa(tarefa) {
         listaTarefas.appendChild(itemTarefa);
 }
 
+function renderizarTarefas() {
+    listaTarefas.innerHTML = "";
+
+    let tarefasFiltradas = tarefas;
+
+    if (filtroAtual === "pendentes") {
+        tarefasFiltradas = tarefas.filter((tarefa) => {
+            return tarefa.concluida === false; 
+        });
+    }
+
+    if (filtroAtual === "concluidas") {
+        tarefasFiltradas = tarefas.filter((tarefa) => {
+            return tarefa.concluida === true; 
+        });
+    }
+
+    tarefasFiltradas.forEach((tarefa) => {
+        criarElementoTarefa(tarefa);
+    });
+}
+
+function atualizarBotoesFiltro(){
+    botaoFiltroTodas.classList.toggle("ativo", filtroAtual === "todas");
+    botaoFiltroPendentes.classList.toggle("ativo", filtroAtual === "pendentes");
+    botaoFiltroConcluidas.classList.toggle("ativo", filtroAtual === "concluidas");
+}
+
+botaoFiltroTodas.addEventListener("click", () => {
+    filtroAtual = "todas";
+    renderizarTarefas();
+    atualizarBotoesFiltro();
+});
+
+botaoFiltroPendentes.addEventListener("click", () => {
+    filtroAtual = "pendentes";
+    renderizarTarefas();
+    atualizarBotoesFiltro();
+});
+
+botaoFiltroConcluidas.addEventListener("click", () => {
+    filtroAtual = "concluidas";
+    renderizarTarefas();
+    atualizarBotoesFiltro();
+});
+
 window.addEventListener("load", () => {
     const tarefasSalvas = localStorage.getItem("tarefas");
     if (tarefasSalvas) {
         tarefas = JSON.parse(tarefasSalvas);
     }
     
-    tarefas.forEach((tarefa) => {
-        criarElementoTarefa(tarefa);
-
-    });
+    renderizarTarefas();
+    atualizarResumo();
 
 });
