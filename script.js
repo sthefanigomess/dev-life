@@ -22,7 +22,12 @@ function atualizarResumo() {
 }
 
 botaoAdicionar.addEventListener("click", () => {
-    const tarefa = inputTarefa.value;
+    const tarefa = inputTarefa.value.trim();
+    if (tarefa === "") {
+        console.log("O input está vazio. Por favor, digite uma tarefa.");
+        return;
+    }
+    
     const novaTarefa = {
         descricao: tarefa,
         concluida: false
