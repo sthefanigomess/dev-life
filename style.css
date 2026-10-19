@@ -114,17 +114,31 @@ body {
 }
 
 #lista-tarefas li button {
-    margin-left: auto;
-    padding: 8px 12px;
-    background: #f05b48;
-    color: #ffffff;
+    padding: 9px 14px;
     border: none;
     border-radius: 8px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-#lista-tarefas li button:hover {
+#lista-tarefas li button:first-of-type {
+    margin-left: auto;
+    background: #2929f5;
+    color: #ffffff;
+}
+
+#lista-tarefas li button:first-of-type:hover {
+    background: #1b28c7;
+}
+
+#lista-tarefas li button:last-of-type {
+    background: #f05b48;
+    color: #ffffff;
+}
+
+#lista-tarefas li button:last-of-type:hover {
     background: #d94332;
 }
 
@@ -218,4 +232,13 @@ body {
 .filtros-tarefas button:hover {
     background: #2929f5;
     color: #ffffff;
+}
+
+#lista-tarefas li button.botao-salvar {
+    background: #238636;
+    color: #ffffff;
+}
+
+#lista-tarefas li button.botao-salvar:hover {
+    background: #196c2e;
 }
