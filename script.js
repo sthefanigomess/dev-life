@@ -5,6 +5,11 @@ const inputTarefa = document.querySelector("#input-tarefa");
 const mensagemErro = document.querySelector("#mensagem-erro");
 const botaoAdicionar = document.querySelector("#botao-adicionar");
 const listaTarefas = document.querySelector("#lista-tarefas");
+
+inputTarefa.addEventListener("input", () => {
+    mensagemErro.textContent= "";
+});
+
 let tarefas = [];
 let filtroAtual = "todas";
 
