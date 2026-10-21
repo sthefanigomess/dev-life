@@ -1,7 +1,8 @@
 document.querySelector("h1").textContent = "Bem-vindo ao Dev Life!";
-document.querySelector("p").textContent = "Organize sua vida, uma tarefa por vez.";
+document.querySelector("#descricao-app").textContent = "Organize sua vida, uma tarefa por vez."
 
 const inputTarefa = document.querySelector("#input-tarefa"); 
+const mensagemErro = document.querySelector("#mensagem-erro");
 const botaoAdicionar = document.querySelector("#botao-adicionar");
 const listaTarefas = document.querySelector("#lista-tarefas");
 let tarefas = [];
@@ -23,20 +24,18 @@ function atualizarResumo() {
 
 botaoAdicionar.addEventListener("click", () => {
     const tarefa = inputTarefa.value.trim();
+
     if (tarefa === "") {
-        console.log("O input está vazio. Por favor, digite uma tarefa.");
+        mensagemErro.textContent = "Digite uma tarefa antes de adicionar.";
         return;
     }
-    
+
     const novaTarefa = {
         descricao: tarefa,
         concluida: false
     }
 
-    if (tarefa === "") {
-        console.log("O input está vazio. Por favor, digite uma tarefa.");
-        return;
-    }
+    mensagemErro.textContent = "";
 
     tarefas.push(novaTarefa);
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
