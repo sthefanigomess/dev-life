@@ -1,14 +1,38 @@
 import './App.css'
+import { useState } from 'react';
 
 function KanbanColumn(props) {
   return (
     <section className="kanban-column">
       <h2>{props.title}</h2>
+
+      {props.tarefas.map((tarefa) => {
+        return (
+          <p key={tarefa.descricao}>{tarefa.descricao}</p>
+        )
+      })}
     </section>
   )
 }
 
 function App() {
+  const [tarefas, setTarefas] = useState([]);
+  const [novaTarefa, setNovaTarefa] = useState("");
+
+  function adicionarTarefa(){
+    if (novaTarefa.trim() === "") {
+      return;
+    }
+
+    setTarefas([
+      ...tarefas,
+      {
+        descricao: novaTarefa,
+        status: "a-fazer"
+      }
+    ]);
+    setNovaTarefa("");
+  }
   return (
     <main>
       <header>
@@ -17,12 +41,37 @@ function App() {
       </header>
 
       <section>
-        <h2>Minhas tarefas</h2>
+        <h2 className='tasks-title'>Minhas tarefas</h2>
+
+        <input
+        type='text'
+        placeholder='Digite uma tarefa'
+        value={novaTarefa}
+        onChange={(evento) => setNovaTarefa(evento.target.value)}
+        />
+
+        <button onClick={adicionarTarefa}>
+          Adicionar Tarefa
+        </button>
 
         <div className="kanban-board">
-        <KanbanColumn title="A fazer" />
-        <KanbanColumn title="Fazendo" />
-        <KanbanColumn title="Concluído" />
+        <KanbanColumn 
+        title="A fazer" 
+        status="a-fazer"
+        tarefas={tarefas}
+        />
+
+        <KanbanColumn 
+        title="Fazendo"
+        status="fazendo" 
+        tarefas={tarefas}
+        />
+
+        <KanbanColumn 
+        title="Concluído"
+        status="concluido"
+        tarefas={tarefas}
+        />
         </div>
       </section>
     </main>
