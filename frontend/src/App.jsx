@@ -16,10 +16,10 @@ function KanbanColumn(props) {
       onDrop={(evento) => {
         evento.preventDefault();
 
-        const descricao = evento.dataTransfer.getData("text/plain");
+        const id = evento.dataTransfer.getData("text/plain");
 
         const novasTarefas = props.tarefas.map((tarefa) => {
-          if (tarefa.descricao === descricao) {
+          if (tarefa.id === id) {
             return {
               ...tarefa,
               status: props.status
@@ -37,15 +37,50 @@ function KanbanColumn(props) {
 
       {tarefasFiltradas.map((tarefa) => {
         return (
-          <p 
+          <div 
+            className='kanban-task'
             draggable={true} 
-            key={tarefa.descricao}
+            key={tarefa.id}
+            onDoubleClick={() => {
+              props.setTarefaEditando(tarefa.id);
+              props.setDescricaoEditada(tarefa.descricao);
+            }}
+            
             onDragStart={(evento) => {
-              evento.dataTransfer.setData("text/plain", tarefa.descricao);
+              evento.dataTransfer.setData("text/plain", tarefa.id);
             }}
           >
-            {tarefa.descricao}
-          </p>
+            {props.tarefaEditando === tarefa.id ? ( 
+              <>
+              <input
+                value={props.descricaoEditada}
+                onChange={(evento) => {
+                  props.setDescricaoEditada(evento.target.value);
+                }}
+                onKeyDown={(evento) => {
+                  if (evento.key === "Enter") {
+                    props.salvarEdicao();
+                  }
+
+                  if (evento.key === "Escape") {
+                    props.cancelarEdicao();
+                  }
+                }}
+              />
+
+              <button onClick={props.salvarEdicao}>
+                Salvar
+              </button>
+
+              <button onClick={props.cancelarEdicao}>
+                Cancelar
+              </button>
+            
+            </>
+            ) : (
+              tarefa.descricao
+            )}
+          </div>
         );
       })}
     </section>
@@ -55,6 +90,9 @@ function KanbanColumn(props) {
 function App() {
   const [tarefas, setTarefas] = useState([]);
   const [novaTarefa, setNovaTarefa] = useState("");
+  const [arrastandoSobreLixeira, setArrastandoSobreLixeira] = useState(false);
+  const [tarefaEditando, setTarefaEditando] = useState(null);
+  const [descricaoEditada, setDescricaoEditada] = useState("");
 
   function adicionarTarefa(){
     if (novaTarefa.trim() === "") {
@@ -64,12 +102,40 @@ function App() {
     setTarefas([
       ...tarefas,
       {
+        id: crypto.randomUUID(),
         descricao: novaTarefa,
         status: "a-fazer"
       }
     ]);
     setNovaTarefa("");
   }
+
+  function salvarEdicao() {
+    if (descricaoEditada.trim() === "") {
+      return;
+    }
+
+    const novasTarefas = tarefas.map((tarefa) => {
+      if (tarefa.id === tarefaEditando) {
+        return {
+          ...tarefa,
+          descricao: descricaoEditada.trim()
+        };
+      }
+
+      return tarefa;
+    });
+
+    setTarefas(novasTarefas);
+    setTarefaEditando(null);
+    setDescricaoEditada("");
+  }
+
+  function cancelarEdicao() {
+    setTarefaEditando(null);
+    setDescricaoEditada("");
+  }
+
   return (
     <main>
       <header>
@@ -97,6 +163,12 @@ function App() {
         status="a-fazer"
         tarefas={tarefas}
         atualizarTarefas={setTarefas}
+        tarefaEditando={tarefaEditando}
+        descricaoEditada={descricaoEditada}
+        setDescricaoEditada={setDescricaoEditada}
+        setTarefaEditando={setTarefaEditando}
+        salvarEdicao={salvarEdicao}
+        cancelarEdicao={cancelarEdicao}
         />
 
         <KanbanColumn 
@@ -104,6 +176,12 @@ function App() {
         status="fazendo" 
         tarefas={tarefas}
         atualizarTarefas={setTarefas}
+        tarefaEditando={tarefaEditando}
+        descricaoEditada={descricaoEditada}
+        setDescricaoEditada={setDescricaoEditada}
+        setTarefaEditando={setTarefaEditando}
+        salvarEdicao={salvarEdicao}
+        cancelarEdicao={cancelarEdicao}
         />
 
         <KanbanColumn 
@@ -111,8 +189,39 @@ function App() {
         status="concluido"
         tarefas={tarefas}
         atualizarTarefas={setTarefas}
+        tarefaEditando={tarefaEditando}
+        descricaoEditada={descricaoEditada}
+        setDescricaoEditada={setDescricaoEditada}
+        setTarefaEditando={setTarefaEditando}
+        salvarEdicao={salvarEdicao}
+        cancelarEdicao={cancelarEdicao}
         />
         </div>
+
+        <div 
+          className={`trash-zone ${arrastandoSobreLixeira ? "drag-over" : ""}`}
+            onDragEnter={() => setArrastandoSobreLixeira(true)}
+            onDragLeave={() => setArrastandoSobreLixeira(false)}
+            onDragOver={(evento) => {
+              evento.preventDefault();
+            }}
+            onDrop={(evento) => {
+              evento.preventDefault();
+              setArrastandoSobreLixeira(false);
+
+              const id = evento.dataTransfer.getData("text/plain");
+              const novasTarefas = tarefas.filter((tarefa) => {
+                return tarefa.id !== id;
+              });
+
+              setTarefas(novasTarefas);
+            }}
+        >
+          
+          <span>🗑️</span>
+          <p>Arraste uma tarefa aqui para excluir</p>
+        </div>
+
       </section>
     </main>
   )

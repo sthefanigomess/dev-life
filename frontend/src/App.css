@@ -54,3 +54,35 @@ header {
 .tasks-title {
   color: #343A40;
 }
+
+.trash-zone {
+  margin-top: 24px;
+  padding: 24px;
+  border: 2px dashed #ef4444;
+  border-radius: 18px;
+  background: #fff1f1;
+  color: #171717;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.trash-zone span {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.trash-zone p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.trash-zone:hover {
+  background: #ffe0e0;
+}
+
+.trash-zone.drag-over {
+  background: #fecaca;
+  border-color: #b91c1c;
+  transform: scale(1.02);
+}
