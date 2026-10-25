@@ -78,7 +78,28 @@ function KanbanColumn(props) {
             
             </>
             ) : (
-              tarefa.descricao
+              <>
+              <span>{tarefa.descricao}</span>
+
+              <button
+                onClick={() => {
+                  const novasTarefas = props.tarefas.map((item) => {
+                    if (item.id === tarefa.id) {
+                      return {
+                        ...item,
+                        status: tarefa.status === "concluido" ? "a-fazer" : "concluido"
+                      };
+                    }
+
+                    return item;
+                });
+
+                props.atualizarTarefas(novasTarefas);
+              }}
+            >
+              {tarefa.status === "concluido" ? "Reabrir" : "Concluir"}
+              </button>
+            </>
             )}
           </div>
         );
