@@ -33,7 +33,11 @@ function KanbanColumn(props) {
       }}
     >
 
-      <h2>{props.title}</h2>
+      <h2>{props.title}
+        <span className='task-count'>
+          {tarefasFiltradas.length}
+        </span>
+      </h2>
 
       {tarefasFiltradas.map((tarefa) => {
         return (
@@ -178,6 +182,7 @@ function App() {
           Adicionar Tarefa
         </button>
 
+        
         <div className="kanban-board">
         <KanbanColumn 
         title="A fazer" 

@@ -86,3 +86,18 @@ header {
   border-color: #b91c1c;
   transform: scale(1.02);
 }
+
+.task-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  margin-left: 10px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #dff36a;
+  color: #171717;
+  font-size: 14px;
+  font-weight: bold;
+}
