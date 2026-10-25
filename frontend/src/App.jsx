@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function KanbanColumn(props) {
   const tarefasFiltradas = props.tarefas.filter((tarefa) => {
@@ -113,7 +113,24 @@ function KanbanColumn(props) {
 }
 
 function App() {
-  const [tarefas, setTarefas] = useState([]);
+  const [tarefas, setTarefas] = useState(() => {
+    const tarefasSalvas = localStorage.getItem("tarefas");
+    
+    if (!tarefasSalvas) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(tarefasSalvas);
+    } catch (erro) {
+      console.error("Erro ao carregar tarefas:", erro);
+      return [];
+    }
+  });
+  useEffect(() => {
+    localStorage.setItem("tarefas", JSON.stringify(tarefas));
+  }, [tarefas]);
+
   const [novaTarefa, setNovaTarefa] = useState("");
   const [arrastandoSobreLixeira, setArrastandoSobreLixeira] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
