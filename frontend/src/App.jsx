@@ -127,11 +127,24 @@ function App() {
       return [];
     }
   });
+
   useEffect(() => {
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
   }, [tarefas]);
 
   const [novaTarefa, setNovaTarefa] = useState("");
+  
+  useEffect(() => {
+    fetch("http://localhost:3000/tarefas")
+    .then((resposta) => resposta.json())
+    .then((dados) => {
+      console.log("Tarefas recebidas da API:", dados);
+    })
+    .catch((erro) => {
+      console.error("Erro ao buscar tarefas:", erro);
+    });
+  }, []);
+
   const [arrastandoSobreLixeira, setArrastandoSobreLixeira] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
   const [descricaoEditada, setDescricaoEditada] = useState("");
