@@ -113,24 +113,7 @@ function KanbanColumn(props) {
 }
 
 function App() {
-  const [tarefas, setTarefas] = useState(() => {
-    const tarefasSalvas = localStorage.getItem("tarefas");
-    
-    if (!tarefasSalvas) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(tarefasSalvas);
-    } catch (erro) {
-      console.error("Erro ao carregar tarefas:", erro);
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("tarefas", JSON.stringify(tarefas));
-  }, [tarefas]);
+  const [tarefas, setTarefas] = useState([]);
 
   const [novaTarefa, setNovaTarefa] = useState("");
   
@@ -139,6 +122,7 @@ function App() {
     .then((resposta) => resposta.json())
     .then((dados) => {
       console.log("Tarefas recebidas da API:", dados);
+      setTarefas(dados);
     })
     .catch((erro) => {
       console.error("Erro ao buscar tarefas:", erro);
@@ -149,38 +133,61 @@ function App() {
   const [tarefaEditando, setTarefaEditando] = useState(null);
   const [descricaoEditada, setDescricaoEditada] = useState("");
 
-  function adicionarTarefa(){
+  async function adicionarTarefa(){
     if (novaTarefa.trim() === "") {
       return;
     }
 
-    setTarefas([
-      ...tarefas,
-      {
-        id: crypto.randomUUID(),
-        descricao: novaTarefa,
+    const resposta = await fetch("http://localhost:3000/tarefas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        descricao: novaTarefa.trim(),
         status: "a-fazer"
-      }
-    ]);
+      })
+    });
+
+    if (!resposta.ok) {
+      console.error("Erro ao adicionar tarefa:", resposta.status);
+      return;
+    }
+
+    const tarefaCriada = await resposta.json();
+
+    setTarefas([...tarefas, tarefaCriada]);
     setNovaTarefa("");
   }
 
-  function salvarEdicao() {
+  async function salvarEdicao() {
     if (descricaoEditada.trim() === "") {
       return;
     }
 
-    const novasTarefas = tarefas.map((tarefa) => {
-      if (tarefa.id === tarefaEditando) {
-        return {
-          ...tarefa,
+    const resposta = await fetch(
+      `http://localhost:3000/tarefas/${tarefaEditando}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
           descricao: descricaoEditada.trim()
-        };
+        })
       }
+    );
 
-      return tarefa;
-    });
+    if(!resposta.ok) {
+      console.error("Erro ao editar tarefa:", resposta.status);
+      return;
+    }
 
+    const tarefaAtualizada = await resposta.json();
+
+    const novasTarefas = tarefas.map((tarefa) => 
+      tarefa.id === tarefaAtualizada.id ? tarefaAtualizada : tarefa
+  );
     setTarefas(novasTarefas);
     setTarefaEditando(null);
     setDescricaoEditada("");

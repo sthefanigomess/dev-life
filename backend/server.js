@@ -33,8 +33,28 @@ app.post("/tarefas", (req, res) => {
     };
 
     tarefas.push(novaTarefa);
-
     res.status(201).json(novaTarefa);
+});
+
+app.put("/tarefas/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const { descricao } = req.body;
+
+    if(!descricao || !descricao.trim()) {
+        return res.status(400).json({
+            erro: "A descrição é obrigatória."
+        });
+    }
+    const tarefa = tarefas.find((tarefa) => tarefa.id === id);
+    
+    if (!tarefa) {
+        return res.status(404).json({
+            erro: "Tarefa não encontrada."
+        });
+    }
+    tarefa.descricao = descricao.trim();
+
+    res.json(tarefa);
 });
 
 app.listen(PORTA, () => {
