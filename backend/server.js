@@ -38,9 +38,15 @@ app.post("/tarefas", (req, res) => {
 
 app.put("/tarefas/:id", (req, res) => {
     const id = Number(req.params.id);
-    const { descricao } = req.body;
+    const { descricao, status } = req.body;
 
-    if(!descricao || !descricao.trim()) {
+    if(status !== undefined && !["a-fazer", "fazendo", "concluido"].includes(status)) {
+        return res.status(400).json({
+            erro: "Status inválido."
+        });
+    }
+
+    if (descricao !== undefined && !descricao.trim()) {
         return res.status(400).json({
             erro: "A descrição é obrigatória."
         });
@@ -52,7 +58,14 @@ app.put("/tarefas/:id", (req, res) => {
             erro: "Tarefa não encontrada."
         });
     }
-    tarefa.descricao = descricao.trim();
+    
+    if (descricao !== undefined) {
+        tarefa.descricao = descricao.trim();
+    }
+
+    if (status !== undefined) {
+        tarefa.status = status;
+    }
 
     res.json(tarefa);
 });

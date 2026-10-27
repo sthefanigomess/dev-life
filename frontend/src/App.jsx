@@ -16,7 +16,7 @@ function KanbanColumn(props) {
       onDrop={(evento) => {
         evento.preventDefault();
 
-        const id = evento.dataTransfer.getData("text/plain");
+        const id = Number(evento.dataTransfer.getData("text/plain"));
 
         const novasTarefas = props.tarefas.map((tarefa) => {
           if (tarefa.id === id) {
@@ -29,7 +29,7 @@ function KanbanColumn(props) {
           return tarefa;
         });
 
-        props.atualizarTarefas(novasTarefas);
+        props.atualizarStatusTarefa(id, props.status);
       }}
     >
 
@@ -193,6 +193,31 @@ function App() {
     setDescricaoEditada("");
   }
 
+  async function atualizarStatusTarefa(id, novoStatus) {
+    const resposta = await fetch(`http://localhost:3000/tarefas/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        status: novoStatus
+      })
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao atualizar o status da tarefa.");
+    }
+    const tarefaAtualizada = await resposta.json();
+
+    setTarefas((tarefasAtuais) => 
+      tarefasAtuais.map((tarefa) => 
+        tarefa.id === tarefaAtualizada.id 
+          ? tarefaAtualizada
+          : tarefa
+        )
+      );
+  }
+
   function cancelarEdicao() {
     setTarefaEditando(null);
     setDescricaoEditada("");
@@ -232,6 +257,7 @@ function App() {
         setTarefaEditando={setTarefaEditando}
         salvarEdicao={salvarEdicao}
         cancelarEdicao={cancelarEdicao}
+        atualizarStatusTarefa={atualizarStatusTarefa}
         />
 
         <KanbanColumn 
@@ -245,6 +271,7 @@ function App() {
         setTarefaEditando={setTarefaEditando}
         salvarEdicao={salvarEdicao}
         cancelarEdicao={cancelarEdicao}
+        atualizarStatusTarefa={atualizarStatusTarefa}
         />
 
         <KanbanColumn 
@@ -258,6 +285,7 @@ function App() {
         setTarefaEditando={setTarefaEditando}
         salvarEdicao={salvarEdicao}
         cancelarEdicao={cancelarEdicao}
+        atualizarStatusTarefa={atualizarStatusTarefa}
         />
         </div>
 
