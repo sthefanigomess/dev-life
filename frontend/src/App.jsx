@@ -218,6 +218,21 @@ function App() {
       );
   }
 
+  async function excluirTarefa(id) {
+    const resposta = await fetch(`http://localhost:3000/tarefas/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!resposta.ok) {
+      console.error("Erro ao excluir tarefa:", resposta.status);
+      return;
+    }
+
+    setTarefas((tarefasAtuais) => 
+      tarefasAtuais.filter((tarefa) => tarefa.id !== id)
+    );
+  }
+
   function cancelarEdicao() {
     setTarefaEditando(null);
     setDescricaoEditada("");
@@ -300,12 +315,8 @@ function App() {
               evento.preventDefault();
               setArrastandoSobreLixeira(false);
 
-              const id = evento.dataTransfer.getData("text/plain");
-              const novasTarefas = tarefas.filter((tarefa) => {
-                return tarefa.id !== id;
-              });
-
-              setTarefas(novasTarefas);
+              const id = Number(evento.dataTransfer.getData("text/plain"));
+              excluirTarefa(id);
             }}
         >
           

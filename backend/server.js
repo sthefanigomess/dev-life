@@ -70,6 +70,12 @@ app.put("/tarefas/:id", (req, res) => {
     res.json(tarefa);
 });
 
+app.delete("/tarefas/:id", (req, res) => {
+    const id = Number(req.params.id);
+    tarefas = tarefas.filter((tarefa) => tarefa.id !== id);
+    res.status(204).send();
+    });
+
 app.listen(PORTA, () => {
     console.log(`Servidor rodando na porta ${PORTA}`);
 });
